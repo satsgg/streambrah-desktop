@@ -50,6 +50,11 @@ impl Actor for MyWebSocket {
     /// Method is called on actor start. We start the heartbeat process here.
     fn started(&mut self, ctx: &mut Self::Context) {
         self.hb(ctx);
+        ctx.text("Welcome to the WebSocket server!");
+        // let store_data: String = tauri::api::invoke_handler(&get_store_data, ());
+
+        // Send the fetched data as an initial message to the connected client
+        // ctx.text(store_data);
     }
 }
 
