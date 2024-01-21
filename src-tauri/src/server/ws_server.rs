@@ -3,6 +3,13 @@ use std::time::{Duration, Instant};
 use actix::prelude::*;
 use actix_web_actors::ws;
 
+use actix_web::web;
+use tauri::Manager;
+
+use crate::NostrState;
+
+use super::TauriAppState;
+
 /// How often heartbeat pings are sent
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
 
@@ -15,11 +22,12 @@ pub struct MyWebSocket {
     /// Client must send ping at least once per 10 seconds (CLIENT_TIMEOUT),
     /// otherwise we drop connection.
     hb: Instant,
+    tauri_app: web::Data<TauriAppState>
 }
 
 impl MyWebSocket {
-    pub fn new() -> Self {
-        Self { hb: Instant::now() }
+    pub fn new(tauri_app_handle: web::Data<TauriAppState>) -> Self {
+        Self { hb: Instant::now(), tauri_app: tauri_app_handle }
     }
 
     /// helper method that sends ping to client every 5 seconds (HEARTBEAT_INTERVAL).
@@ -51,10 +59,10 @@ impl Actor for MyWebSocket {
     fn started(&mut self, ctx: &mut Self::Context) {
         self.hb(ctx);
         ctx.text("Welcome to the WebSocket server!");
-        // let store_data: String = tauri::api::invoke_handler(&get_store_data, ());
-
-        // Send the fetched data as an initial message to the connected client
-        // ctx.text(store_data);
+        let tauri_app_handle = self.tauri_app.app.lock().unwrap().clone();
+        let my_state = tauri_app_handle.state::<NostrState>();
+        let v = my_state.value.lock().unwrap().clone();
+        ctx.text(v);
     }
 }
 

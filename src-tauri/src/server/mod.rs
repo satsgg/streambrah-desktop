@@ -9,13 +9,17 @@ use tauri::AppHandle;
 mod ws_server;
 use self::ws_server::MyWebSocket;
 
-struct TauriAppState {
+pub struct TauriAppState {
     app: Mutex<AppHandle>,
 }
 
 /// WebSocket handshake and start `MyWebSocket` actor.
-async fn echo_ws(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
-    ws::start(MyWebSocket::new(), &req, stream)
+async fn echo_ws(
+    req: HttpRequest, 
+    stream: web::Payload,
+    tauri_app: web::Data<TauriAppState>,
+) -> Result<HttpResponse, Error> {
+    ws::start(MyWebSocket::new(tauri_app), &req, stream)
 }
 
 #[actix_web::main]

@@ -7,7 +7,7 @@ use std::sync::Mutex;
 
 use tauri::State;
 
-struct NostrState {
+pub struct NostrState {
     value: Mutex<String>,
 }
 
