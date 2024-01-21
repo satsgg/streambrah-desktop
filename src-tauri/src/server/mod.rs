@@ -1,35 +1,22 @@
-// mod handlers;
-
 use std::{sync::Mutex};
 
-// use actix_files::NamedFile;
 use actix_files as fs;
 
-use actix_web::{middleware, web, App, HttpServer, get};
+use actix_web::{middleware, web, Error, App, HttpRequest, HttpResponse, HttpServer};
+use actix_web_actors::ws;
 use tauri::AppHandle;
+
+mod ws_server;
+use self::ws_server::MyWebSocket;
 
 struct TauriAppState {
     app: Mutex<AppHandle>,
 }
 
-// // TODO: Try serving the entire web directory
-// // not getting _next/static/css files
-// #[get("/")]
-// // async fn handle(tauri_app: web::Data<TauriAppState>) -> actix_web::Result<NamedFile> {
-// async fn handle(tauri_app: web::Data<TauriAppState>) -> actix_web::Result<NamedFile> {
-//     let resource_path = tauri_app.app.lock().unwrap().path_resolver()
-//     // .resolve_resource("web/index.html")
-//     .resolve_resource("web")
-//     .expect("failed to resolve resource");
-//     println!("{}", resource_path.display());
-
-//     // let text = "hello world";
-//     // println!("{}",text);
-
-//     // Ok(text.to_string())
-//     // Ok(NamedFile::open(resource_path)?)
-//     Ok(fs::Files::new("/web", ".").show_files_listing())
-// }
+/// WebSocket handshake and start `MyWebSocket` actor.
+async fn echo_ws(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
+    ws::start(MyWebSocket::new(), &req, stream)
+}
 
 #[actix_web::main]
 pub async fn init(app: AppHandle) -> std::io::Result<()> {
@@ -41,8 +28,7 @@ pub async fn init(app: AppHandle) -> std::io::Result<()> {
         App::new()
             .app_data(tauri_app.clone())
             .wrap(middleware::Logger::default())
-            // .service(handlers::example::handle)
-            // .service(handle)
+            .service(web::resource("/ws").route(web::get().to(echo_ws)))
             .service(fs::Files::new("/", tauri_app.app.lock().unwrap().path_resolver().resolve_resource("web").expect("failed to resolve resource")))
     })
     .bind(("127.0.0.1", 4875))?
