@@ -38,7 +38,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["test.html"],
+      "resources": ["web"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
