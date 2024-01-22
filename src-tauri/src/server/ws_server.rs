@@ -6,7 +6,7 @@ use actix_web_actors::ws;
 use actix_web::web;
 use tauri::Manager;
 
-use crate::NostrState;
+use crate::{NostrState, ReturnNostrState};
 
 use super::TauriAppState;
 
@@ -61,8 +61,14 @@ impl Actor for MyWebSocket {
         ctx.text("Welcome to the WebSocket server!");
         let tauri_app_handle = self.tauri_app.app.lock().unwrap().clone();
         let my_state = tauri_app_handle.state::<NostrState>();
-        let v = my_state.value.lock().unwrap().clone();
-        ctx.text(v);
+
+        let res = ReturnNostrState {
+            pubkey: my_state.pubkey.lock().unwrap().clone(),
+            identifier: my_state.identifier.lock().unwrap().clone()
+        };
+
+        let json_text = serde_json::to_string(&res).expect("Serialization failed");
+        ctx.text(json_text)
     }
 }
 

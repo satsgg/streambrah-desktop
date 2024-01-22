@@ -5,33 +5,51 @@ mod server;
 use std::thread;
 use std::sync::Mutex;
 
+use serde::Serialize;
 use tauri::State;
 
 pub struct NostrState {
-    value: Mutex<String>,
+    pubkey: Mutex<String>,
+    identifier: Mutex<String>,
+}
+
+#[derive(Serialize)]
+struct ReturnNostrState {
+    pubkey: String,
+    identifier: String
 }
 
 impl NostrState {
     fn new() -> Self {
         NostrState {
-            value: Mutex::new(String::from("Initial Value")),
+            pubkey: Mutex::new(String::from("Initial pubkey")),
+            identifier: Mutex::new(String::from("Initial identifier"))
         }
     }
 }
 
 #[tauri::command]
-fn get_state<'r>(state: State<'r, NostrState>) -> String {
-    let v = state.value.lock().unwrap().clone();
-    println!("state: {}", v);
-    v
+fn get_state<'r>(state: State<'r, NostrState>) -> ReturnNostrState {
+    let pubkey = state.pubkey.lock().unwrap().clone();
+    let identifier = state.identifier.lock().unwrap().clone();
+    println!("pubkey: {}", pubkey);
+    println!("identifier: {}", identifier);
+    ReturnNostrState {
+        pubkey,
+        identifier
+    }
 }
 
 #[tauri::command]
-fn set_state<'r>(state: State<'r, NostrState>, new_value: String) -> String {
-    println!("setting state: {}", new_value);
-    *state.value.lock().unwrap() = new_value;
-    let v = state.value.lock().unwrap().clone();
-    v
+fn set_state<'r>(state: State<'r, NostrState>, pubkey: String, identifier: String) -> ReturnNostrState {
+    println!("setting state: {}", pubkey);
+    *state.pubkey.lock().unwrap() = pubkey;
+    *state.identifier.lock().unwrap() = identifier;
+
+    ReturnNostrState {
+        pubkey: state.pubkey.lock().unwrap().clone(),
+        identifier: state.identifier.lock().unwrap().clone()
+    }
 }
 
 fn main() {
