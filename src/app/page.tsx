@@ -33,12 +33,25 @@ export default function Home() {
     });
   };
 
+  const storePrivateKey = async () => {
+    console.debug("storing private key");
+    try {
+      const res = await invoke("store_private_key", { privateKey: "key" });
+      console.debug("res", res);
+    } catch (e: any) {
+      console.error("failed to store private key", e);
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <p>{nostrState.pubkey}</p>
       <p>{nostrState.identifier}</p>
       <button onClick={async () => await getState()}>get state</button>
       <button onClick={async () => await setState()}>set state</button>
+      <button onClick={async () => await storePrivateKey()}>
+        store private key
+      </button>
     </main>
   );
 }
