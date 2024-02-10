@@ -1,13 +1,20 @@
 use std::sync::Mutex;
 
+use actix::Addr;
 use actix_files as fs;
 
 use actix_web::{middleware, web, Error, App, HttpRequest, HttpResponse, HttpServer};
 use actix_web_actors::ws;
 use tauri::AppHandle;
 
-mod ws_server;
+pub(crate) mod ws_server;
 use self::ws_server::MyWebSocket;
+
+
+pub struct WidgetClientActors {
+  pub clients: Mutex<Vec<Addr<MyWebSocket>>>
+}
+
 
 pub struct TauriAppState {
     app: Mutex<AppHandle>,

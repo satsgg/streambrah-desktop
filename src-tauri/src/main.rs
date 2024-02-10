@@ -5,8 +5,11 @@ mod server;
 use std::thread;
 use std::sync::Mutex;
 
+use actix_web_actors::ws;
 use serde::Serialize;
+use server::WidgetClientActors;
 use tauri::State;
+
 
 pub struct NostrState {
     pubkey: Mutex<String>,
@@ -29,11 +32,17 @@ impl NostrState {
 }
 
 #[tauri::command]
-fn get_state<'r>(state: State<'r, NostrState>) -> ReturnNostrState {
+fn get_state<'r>(state: State<'r, NostrState>, widget_actors: State<'r, WidgetClientActors>) -> ReturnNostrState {
     let pubkey = state.pubkey.lock().unwrap().clone();
     let identifier = state.identifier.lock().unwrap().clone();
     println!("pubkey: {}", pubkey);
     println!("identifier: {}", identifier);
+
+    for client in widget_actors.clients.lock().unwrap().iter() {
+        let message = server::ws_server::WebSocketMessage(ws::Message::Text("Hello, client!".to_string().into()));
+        client.try_send(message).unwrap();
+    };
+
     ReturnNostrState {
         pubkey,
         identifier
@@ -54,9 +63,12 @@ fn set_state<'r>(state: State<'r, NostrState>, pubkey: String, identifier: Strin
 
 fn main() {
     let nostr_state = NostrState::new();
-
+    let widget_actors: WidgetClientActors = WidgetClientActors {
+      clients: Mutex::new(vec![])
+    };
     tauri::Builder::default()
         .manage(nostr_state)
+        .manage(widget_actors)
         .setup(|app| {
         let handle = app.handle();
         let boxed_handle = Box::new(handle);
