@@ -6,6 +6,7 @@ export default function MenuItem({
   name,
   layout,
   icon,
+  highlighted = false,
   expandable = false,
   expanded = false,
   onClick,
@@ -13,15 +14,16 @@ export default function MenuItem({
   name: string;
   layout: MenuState;
   icon: JSX.Element;
+  highlighted?: boolean;
   expandable?: boolean;
   expanded?: boolean;
   onClick?: () => void;
 }) {
   return (
     <div
-      className={`${
-        expandable ? "hover:cursor-pointer" : ""
-      } flex justify-between px-4 py-2 mx-1 rounded hover:bg-gray-500`}
+      className={`${expandable ? "hover:cursor-pointer" : ""} ${
+        highlighted ? "bg-red-500" : "hover:bg-stone-800"
+      } flex justify-between px-4 py-2 mx-1 rounded`}
       onClick={onClick}
     >
       <div className="flex gap-2">

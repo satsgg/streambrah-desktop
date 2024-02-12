@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { MenuState } from "@/store/types";
 import OpenLeft from "@/svgs/openLeft.svg";
 import OpenRight from "@/svgs/openRight.svg";
@@ -16,6 +17,8 @@ export default function Menu({
   layout: MenuState;
   setLayout: (state: MenuState) => void;
 }) {
+  const pathName = usePathname();
+
   const [expandedItems, setExpandedItems] = useState({
     integrations: false,
   });
@@ -54,6 +57,7 @@ export default function Menu({
         <MenuItem
           name="dashboard"
           layout={layout}
+          highlighted={pathName == "/"}
           icon={
             <Home
               width={24}
@@ -69,6 +73,7 @@ export default function Menu({
         <MenuItem
           name="settings"
           layout={layout}
+          highlighted={pathName == "/settings"}
           icon={
             <Settings
               width={24}
@@ -84,6 +89,7 @@ export default function Menu({
         <MenuItem
           name="streaming apps"
           layout={layout}
+          highlighted={pathName == "/apps"}
           icon={
             <VideoCamera
               width={24}
@@ -98,6 +104,9 @@ export default function Menu({
       <MenuItem
         name="integrations"
         layout={layout}
+        highlighted={
+          !expandedItems.integrations && pathName.includes("/integrations")
+        }
         icon={
           <Wrench
             width={24}
@@ -124,9 +133,11 @@ export default function Menu({
       >
         <Link href="/integrations/owncast">
           <div
-            className={`${
-              expandedItems.integrations ? "" : "hidden"
-            } flex pl-12 pr-4 py-2 mx-1 rounded hover:bg-gray-500`}
+            className={`${expandedItems.integrations ? "" : "hidden"} ${
+              pathName === "/integrations/owncast"
+                ? "bg-red-500"
+                : "hover:bg-stone-800"
+            } flex pl-12 pr-4 py-2 mx-1 rounded`}
           >
             <p className="capitalize">owncast</p>
           </div>
