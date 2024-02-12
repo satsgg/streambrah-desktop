@@ -13,9 +13,11 @@ import MenuItem from "./menuItem";
 export default function Menu({
   layout,
   setLayout,
+  autoCollapseMenu,
 }: {
   layout: MenuState;
   setLayout: (state: MenuState) => void;
+  autoCollapseMenu: boolean;
 }) {
   const pathName = usePathname();
 
@@ -23,45 +25,52 @@ export default function Menu({
     integrations: false,
   });
 
+  const fLayout = autoCollapseMenu ? "collapsed" : layout;
+
   return (
     <div
-      className={`${layout === "collapsed" ? "w-16" : "w-1/6"} flex flex-col`}
+      className={`${
+        fLayout === "collapsed" ? "w-16" : "min-w-64"
+      } flex flex-col`}
     >
-      <div
-        className={`flex ${
-          layout === "expanded" ? "justify-between" : "justify-center"
-        } px-4 py-2`}
-      >
-        {layout === "expanded" && (
-          <p className="text-sm font-semibold uppercase">Menu</p>
-        )}
-        <button
-          onClick={() =>
-            setLayout(layout === "expanded" ? "collapsed" : "expanded")
-          }
+      {!autoCollapseMenu && (
+        <div
+          className={`flex ${
+            fLayout === "expanded" ? "justify-between" : "justify-center"
+          } px-4 py-2`}
         >
-          {layout === "expanded" && (
-            <OpenLeft
-              width={24}
-              height={24}
-              strokeWidth={2}
-              className="stroke-white"
-            />
+          {fLayout === "expanded" && (
+            <p className="text-sm font-semibold uppercase">Menu</p>
           )}
-          {layout === "collapsed" && (
-            <OpenRight
-              width={24}
-              height={24}
-              strokeWidth={2}
-              className="stroke-white"
-            />
-          )}
-        </button>
-      </div>
+          <button
+            onClick={() =>
+              setLayout(fLayout === "expanded" ? "collapsed" : "expanded")
+            }
+          >
+            {fLayout === "expanded" && (
+              <OpenLeft
+                width={24}
+                height={24}
+                strokeWidth={2}
+                className="stroke-white"
+              />
+            )}
+            {fLayout === "collapsed" && (
+              <OpenRight
+                width={24}
+                height={24}
+                strokeWidth={2}
+                className="stroke-white"
+              />
+            )}
+          </button>
+        </div>
+      )}
+
       <Link href="/">
         <MenuItem
           name="dashboard"
-          layout={layout}
+          layout={fLayout}
           highlighted={pathName == "/"}
           icon={
             <Home
@@ -77,7 +86,7 @@ export default function Menu({
       <Link href="/settings">
         <MenuItem
           name="settings"
-          layout={layout}
+          layout={fLayout}
           highlighted={pathName == "/settings"}
           icon={
             <Settings
@@ -93,7 +102,7 @@ export default function Menu({
       <Link href="/apps">
         <MenuItem
           name="streaming apps"
-          layout={layout}
+          layout={fLayout}
           highlighted={pathName == "/apps"}
           icon={
             <VideoCamera
@@ -108,9 +117,9 @@ export default function Menu({
 
       <MenuItem
         name="integrations"
-        layout={layout}
+        layout={fLayout}
         highlighted={
-          (!expandedItems.integrations || layout === "collapsed") &&
+          (!expandedItems.integrations || fLayout === "collapsed") &&
           pathName.includes("/integrations")
         }
         icon={
@@ -140,7 +149,7 @@ export default function Menu({
         <Link href="/integrations/owncast">
           <div
             className={`
-            ${layout === "collapsed" ? "hidden" : ""}
+            ${fLayout === "collapsed" ? "hidden" : ""}
             ${expandedItems.integrations ? "" : "hidden"} ${
               pathName === "/integrations/owncast"
                 ? "bg-red-500"

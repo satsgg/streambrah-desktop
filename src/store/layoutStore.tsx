@@ -2,8 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { MenuState } from "./types";
 
-// type MenuState = "expanded" | "collapsed" | "hidden";
-
 type State = {
   menu: MenuState;
 };
