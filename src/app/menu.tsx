@@ -102,7 +102,7 @@ export default function Menu({
 
       <Link href="/apps">
         <MenuItem
-          name="streaming apps"
+          name="apps"
           collapse={collapse}
           highlighted={pathName == "/apps"}
           icon={
