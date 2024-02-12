@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MenuState } from "@/store/types";
 import OpenLeft from "@/svgs/openLeft.svg";
 import OpenRight from "@/svgs/openRight.svg";
@@ -7,6 +8,7 @@ import VideoCamera from "@/svgs/videoCamera.svg";
 import Wrench from "@/svgs/wrench.svg";
 import ArrowDown from "@/svgs/arrowDown.svg";
 import Link from "next/link";
+import MenuItem from "./menuItem";
 
 export default function Menu({
   layout,
@@ -15,6 +17,9 @@ export default function Menu({
   layout: MenuState;
   setLayout: (state: MenuState) => void;
 }) {
+  const [expandedItems, setExpandedItems] = useState({
+    integrations: false,
+  });
   return (
     <div
       className={`${layout === "collapsed" ? "w-16" : "w-1/6"} flex flex-col`}
@@ -46,84 +51,81 @@ export default function Menu({
           )}
         </button>
       </div>
-
       <Link href="/">
-        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
-          <div className="flex gap-2">
+        <MenuItem
+          name="dashboard"
+          layout={layout}
+          icon={
             <Home
               width={24}
               height={24}
               strokeWidth={1.5}
               className="stroke-white"
             />
-            <p
-              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
-            >
-              dashboard
-            </p>
-          </div>
-        </div>
+          }
+        />
       </Link>
 
       <Link href="/settings">
-        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
-          <div className="flex gap-2">
+        <MenuItem
+          name="settings"
+          layout={layout}
+          icon={
             <Settings
               width={24}
               height={24}
               strokeWidth={1.5}
               className="stroke-white"
             />
-            <p
-              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
-            >
-              settings
-            </p>
-          </div>
-        </div>
+          }
+        />
       </Link>
 
       <Link href="/apps">
-        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
-          <div className="flex gap-2">
+        <MenuItem
+          name="streaming apps"
+          layout={layout}
+          icon={
             <VideoCamera
               width={24}
               height={24}
               strokeWidth={1.5}
               className="stroke-white"
             />
-            <p
-              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
-            >
-              streaming apps
-            </p>
-          </div>
-        </div>
+          }
+        />
       </Link>
 
-      <Link href="/integrations/owncast">
-        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
-          <div className="flex gap-2">
-            <Wrench
-              width={24}
-              height={24}
-              strokeWidth={1.2}
-              className="stroke-white"
-            />
-            <p
-              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
-            >
-              integrations
-            </p>
-          </div>
-          <ArrowDown
+      <MenuItem
+        name="integrations"
+        layout={layout}
+        icon={
+          <Wrench
             width={24}
             height={24}
-            strokeWidth={2.0}
+            strokeWidth={1.2}
             className="stroke-white"
           />
-        </div>
-      </Link>
+        }
+        expandable
+        expanded={expandedItems.integrations}
+        onClick={() =>
+          setExpandedItems((prev) => {
+            return {
+              ...prev,
+              integrations: !prev.integrations,
+            };
+          })
+        }
+      />
+
+      {expandedItems.integrations && (
+        <Link href="/integrations/owncast">
+          <div className="flex pl-12 pr-4 py-2 mx-1 rounded hover:bg-gray-500">
+            <p className="capitalize">owncast</p>
+          </div>
+        </Link>
+      )}
     </div>
   );
 }
