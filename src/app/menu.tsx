@@ -6,7 +6,6 @@ import Home from "@/svgs/home.svg";
 import Settings from "@/svgs/settings.svg";
 import VideoCamera from "@/svgs/videoCamera.svg";
 import Wrench from "@/svgs/wrench.svg";
-import ArrowDown from "@/svgs/arrowDown.svg";
 import Link from "next/link";
 import MenuItem from "./menuItem";
 
@@ -118,14 +117,21 @@ export default function Menu({
           })
         }
       />
-
-      {expandedItems.integrations && (
+      <div
+        className={`${
+          expandedItems.integrations ? "max-h-20" : "invisible max-h-0"
+        } transition-all linear`}
+      >
         <Link href="/integrations/owncast">
-          <div className="flex pl-12 pr-4 py-2 mx-1 rounded hover:bg-gray-500">
+          <div
+            className={`${
+              expandedItems.integrations ? "" : "hidden"
+            } flex pl-12 pr-4 py-2 mx-1 rounded hover:bg-gray-500`}
+          >
             <p className="capitalize">owncast</p>
           </div>
         </Link>
-      )}
+      </div>
     </div>
   );
 }
