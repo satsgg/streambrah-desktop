@@ -6,6 +6,7 @@ import Settings from "@/svgs/settings.svg";
 import VideoCamera from "@/svgs/videoCamera.svg";
 import Wrench from "@/svgs/wrench.svg";
 import ArrowDown from "@/svgs/arrowDown.svg";
+import Link from "next/link";
 
 export default function Menu({
   layout,
@@ -45,64 +46,84 @@ export default function Menu({
           )}
         </button>
       </div>
-      <div className="flex justify-between px-4 py-2">
-        <div className="flex gap-2">
-          <Home
+
+      <Link href="/">
+        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
+          <div className="flex gap-2">
+            <Home
+              width={24}
+              height={24}
+              strokeWidth={1.5}
+              className="stroke-white"
+            />
+            <p
+              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
+            >
+              dashboard
+            </p>
+          </div>
+        </div>
+      </Link>
+
+      <Link href="/settings">
+        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
+          <div className="flex gap-2">
+            <Settings
+              width={24}
+              height={24}
+              strokeWidth={1.5}
+              className="stroke-white"
+            />
+            <p
+              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
+            >
+              settings
+            </p>
+          </div>
+        </div>
+      </Link>
+
+      <Link href="/apps">
+        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
+          <div className="flex gap-2">
+            <VideoCamera
+              width={24}
+              height={24}
+              strokeWidth={1.5}
+              className="stroke-white"
+            />
+            <p
+              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
+            >
+              streaming apps
+            </p>
+          </div>
+        </div>
+      </Link>
+
+      <Link href="/integrations/owncast">
+        <div className="flex justify-between px-4 py-2 mx-1 rounded hover:bg-red-500">
+          <div className="flex gap-2">
+            <Wrench
+              width={24}
+              height={24}
+              strokeWidth={1.2}
+              className="stroke-white"
+            />
+            <p
+              className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}
+            >
+              integrations
+            </p>
+          </div>
+          <ArrowDown
             width={24}
             height={24}
-            strokeWidth={1.5}
+            strokeWidth={2.0}
             className="stroke-white"
           />
-          <p className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}>
-            dashboard
-          </p>
         </div>
-      </div>
-      <div className="flex justify-between px-4 py-2">
-        <div className="flex gap-2">
-          <Settings
-            width={24}
-            height={24}
-            strokeWidth={1.5}
-            className="stroke-white"
-          />
-          <p className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}>
-            settings
-          </p>
-        </div>
-      </div>
-      <div className="flex justify-between px-4 py-2">
-        <div className="flex gap-2">
-          <VideoCamera
-            width={24}
-            height={24}
-            strokeWidth={1.5}
-            className="stroke-white"
-          />
-          <p className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}>
-            streaming apps
-          </p>
-        </div>
-      </div>
-      <div className="flex justify-between px-4 py-2">
-        <div className="flex gap-2">
-          <Wrench
-            width={24}
-            height={24}
-            strokeWidth={1.2}
-            className="stroke-white"
-          />
-          <p className={`${layout === "collapsed" ? "hidden" : ""} capitalize`}>
-            integrations
-          </p>
-        </div>
-        <ArrowDown
-          width={24}
-          height={24}
-          strokeWidth={2.0}
-          className="stroke-white"
-        />
-      </div>
+      </Link>
     </div>
   );
 }

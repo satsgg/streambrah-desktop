@@ -1,7 +1,7 @@
 export default function StreamPreview() {
   return (
-    <div className="flex flex-col">
-      <div className="aspect-video h-full w-full">
+    <div className="flex flex-col w-full">
+      <div className="aspect-video">
         <video controls>
           <source
             src="https://pokemon.sats.gg/hls/stream.m3u8"
