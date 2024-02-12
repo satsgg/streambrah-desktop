@@ -1,1 +1,4 @@
-export type MenuState = "expanded" | "collapsed" | "hidden";
+export type MenuState = {
+  collapsed: boolean;
+  hidden: boolean;
+};

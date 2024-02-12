@@ -1,10 +1,9 @@
-import { MenuState } from "@/store/types";
 import ArrowDown from "@/svgs/arrowDown.svg";
 import ArrowUp from "@/svgs/arrowUp.svg";
 
 export default function MenuItem({
   name,
-  layout,
+  collapse,
   icon,
   highlighted = false,
   expandable = false,
@@ -12,7 +11,7 @@ export default function MenuItem({
   onClick,
 }: {
   name: string;
-  layout: MenuState;
+  collapse: boolean;
   icon: JSX.Element;
   highlighted?: boolean;
   expandable?: boolean;
@@ -28,11 +27,7 @@ export default function MenuItem({
     >
       <div className="flex gap-2">
         {icon}
-        <p
-          className={`${
-            layout === "collapsed" ? "hidden" : ""
-          } capitalize select-none`}
-        >
+        <p className={`${collapse ? "hidden" : ""} capitalize select-none`}>
           {name}
         </p>
       </div>

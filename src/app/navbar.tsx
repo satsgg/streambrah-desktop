@@ -1,5 +1,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Menu from "@/svgs/menu.svg";
+import { MenuState } from "@/store/types";
 
 const getTitle = (pathname: string) => {
   if (pathname === "/") {
@@ -15,7 +17,13 @@ const getTitle = (pathname: string) => {
   }
 };
 
-export default function Navbar() {
+export default function Navbar({
+  menu,
+  setMenuState,
+}: {
+  menu: MenuState;
+  setMenuState: (state: MenuState) => void;
+}) {
   const pathname = usePathname();
   const [title, setTitle] = useState("dashboard");
 
@@ -25,8 +33,26 @@ export default function Navbar() {
 
   return (
     <nav className="">
-      <div className="flex px-4 py-2 justify-between">
-        <div>
+      <div className="flex px-3 py-2 justify-between">
+        <div className="flex gap-2 items-center">
+          <button
+            className={`${
+              menu.hidden ? "hover:bg-stone-800" : "bg-stone-800"
+            } rounded px-2 py-1`}
+            onClick={() =>
+              setMenuState({
+                collapsed: menu.collapsed,
+                hidden: !menu.hidden,
+              })
+            }
+          >
+            <Menu
+              height={24}
+              width={24}
+              strokeWidth={1.5}
+              className="stroke-white"
+            />
+          </button>
           <p className="text-lg capitalize">{title}</p>
         </div>
         <div>

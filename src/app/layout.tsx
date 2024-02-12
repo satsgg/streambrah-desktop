@@ -6,7 +6,6 @@ import useLayoutStore from "@/store/layoutStore";
 import Navbar from "./navbar";
 import Menu from "./menu";
 import useMediaQuery from "./useMediaQuery";
-import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="flex flex-col h-full">
-          <Navbar />
+          <Navbar menu={menu} setMenuState={setMenuState} />
           <div className="flex h-full">
             <Menu
               layout={menu}

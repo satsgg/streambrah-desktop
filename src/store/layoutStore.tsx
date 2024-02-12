@@ -3,7 +3,10 @@ import { persist } from "zustand/middleware";
 import { MenuState } from "./types";
 
 type State = {
-  menu: MenuState;
+  menu: {
+    collapsed: boolean;
+    hidden: boolean;
+  };
 };
 
 type Actions = {
@@ -11,7 +14,10 @@ type Actions = {
 };
 
 const initialState = {
-  menu: "expanded" as const,
+  menu: {
+    collapsed: false,
+    hidden: false,
+  },
 };
 
 export const useLayoutStore = create<State & Actions>()(
