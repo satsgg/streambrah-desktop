@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { MenuState } from "@/store/types";
 import OpenLeft from "@/svgs/openLeft.svg";
@@ -22,11 +22,16 @@ export default function Menu({
   const [expandedItems, setExpandedItems] = useState({
     integrations: false,
   });
+
   return (
     <div
       className={`${layout === "collapsed" ? "w-16" : "w-1/6"} flex flex-col`}
     >
-      <div className="flex justify-between px-4 py-2">
+      <div
+        className={`flex ${
+          layout === "expanded" ? "justify-between" : "justify-center"
+        } px-4 py-2`}
+      >
         {layout === "expanded" && (
           <p className="text-sm font-semibold uppercase">Menu</p>
         )}
@@ -105,7 +110,8 @@ export default function Menu({
         name="integrations"
         layout={layout}
         highlighted={
-          !expandedItems.integrations && pathName.includes("/integrations")
+          (!expandedItems.integrations || layout === "collapsed") &&
+          pathName.includes("/integrations")
         }
         icon={
           <Wrench
@@ -133,7 +139,9 @@ export default function Menu({
       >
         <Link href="/integrations/owncast">
           <div
-            className={`${expandedItems.integrations ? "" : "hidden"} ${
+            className={`
+            ${layout === "collapsed" ? "hidden" : ""}
+            ${expandedItems.integrations ? "" : "hidden"} ${
               pathName === "/integrations/owncast"
                 ? "bg-red-500"
                 : "hover:bg-stone-800"
