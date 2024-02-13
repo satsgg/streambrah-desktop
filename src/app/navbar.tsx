@@ -32,8 +32,8 @@ export default function Navbar({
   }, [pathname]);
 
   return (
-    <nav className="">
-      <div className="flex px-3 py-2 justify-between">
+    <nav className="bg-stone-900 border-b border-black">
+      <div className="flex px-3 py-2 justify-between items-center">
         <div className="flex gap-2 items-center">
           <button
             className={`${

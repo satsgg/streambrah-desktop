@@ -14,6 +14,7 @@ export default function Chat() {
       // kinds: [9735],
       kinds: [1],
       // "#p": [pubkey || ""],
+      // since: now.current,
       since: now.current - 60 * 1,
       // since: now.current - 1000 * 60 * 60 * 1,
     },
@@ -24,16 +25,16 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col w-1/4">
-      <div className="flex justify-center border-b">
-        <p>Chat</p>
+      <div className="flex justify-center capitalize border border-black bg-stone-900 py-2">
+        <p>chat</p>
       </div>
-      <div className="relative h-full">
+      <div className="relative h-full bg-stone-900 border border-black">
         <div
-          className="max-h-[calc(100vh-12.0rem)] overflow-y-auto"
+          className="max-h-[calc(100vh-13.0rem)] overflow-auto"
           ref={chatMessagesBoxRef}
         >
           {chatMessages.map((event) => (
-            <div key={event.id} className="px-2 py-1 break-words">
+            <div key={event.id} className="px-2 py-1 break-all">
               {fmtMsg(event.content, 250)}
             </div>
           ))}

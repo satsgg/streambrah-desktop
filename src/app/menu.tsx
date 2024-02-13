@@ -31,7 +31,7 @@ export default function Menu({
     <div
       className={`${layout.hidden ? "hidden" : ""} ${
         collapse ? "w-16" : "min-w-64"
-      } flex flex-col`}
+      } flex flex-col border border-black bg-stone-900`}
     >
       {!autoCollapseMenu && (
         <div
