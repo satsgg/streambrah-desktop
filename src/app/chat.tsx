@@ -46,7 +46,7 @@ export default function Chat() {
           />
         )}
       </div>
-      <div className="px-4 py-4">
+      <div className="px-4 py-4 bg-stone-900">
         <div className="flex flex-col gap-4">
           <div className="border rounded px-2 py-1">Send a message</div>
           <div className="flex justify-end">

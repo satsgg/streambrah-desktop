@@ -1,6 +1,6 @@
 export default function StreamPreview() {
   return (
-    <div className="flex flex-col w-1/2">
+    <div className="flex flex-col w-1/2 bg-stone-900">
       <div className="flex justify-center capitalize py-2 border border-black bg-stone-900">
         stream preview
       </div>
