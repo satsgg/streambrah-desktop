@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { menu, setMenuState } = useLayoutStore();
-  const autoCollapseMenu = !useMediaQuery("(min-width: 1024px)");
+  const autoCollapseMenu = useMediaQuery("(max-width: 1024px)");
 
   return (
     <html lang="en">
