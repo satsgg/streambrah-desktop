@@ -14,7 +14,7 @@ export default function Chat() {
       // kinds: [9735],
       kinds: [1],
       // "#p": [pubkey || ""],
-      since: now.current,
+      since: now.current - 60 * 1,
       // since: now.current - 1000 * 60 * 60 * 1,
     },
   ]);
@@ -27,9 +27,9 @@ export default function Chat() {
       <div className="flex justify-center border-b">
         <p>Chat</p>
       </div>
-      <div className="relative">
+      <div className="relative h-full">
         <div
-          className="max-h-[calc(50vh)] overflow-y-auto"
+          className="max-h-[calc(100vh-12.0rem)] overflow-y-auto"
           ref={chatMessagesBoxRef}
         >
           {chatMessages.map((event) => (
@@ -44,6 +44,16 @@ export default function Chat() {
             className="absolute bottom-0 left-1/2 -translate-x-1/2 pb-3"
           />
         )}
+      </div>
+      <div className="px-4 py-4">
+        <div className="flex flex-col gap-4">
+          <div className="border rounded px-2 py-1">Send a message</div>
+          <div className="flex justify-end">
+            <button className="border rounded bg-red-500 px-2 py-1">
+              Chat
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
