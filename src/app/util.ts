@@ -1,4 +1,37 @@
 import { Event } from "nostr-tools/core";
+import { nsecEncode, decode } from "nostr-tools/nip19";
+
+export const validHexPrivkey = (hexKey: string) => {
+  try {
+    if (!hexKey.match(/^[a-f0-9]{64}$/)) {
+      throw new Error("Invalid hex private key");
+    }
+    const textEncoder = new TextEncoder();
+    let npub = nsecEncode(textEncoder.encode(hexKey));
+    let { type, data: nipData } = decode(npub);
+    if (type !== "nsec") {
+      throw new Error("Invalid hex private key");
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+
+  return true;
+};
+
+export const validNsecKey = (nsec: string) => {
+  try {
+    if (nsec.length !== 63) throw new Error("Invalid nsec key length");
+    let { type, data: nipData } = decode(nsec);
+    if (type !== "nsec") throw new Error("Invalid nsec key");
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+
+  return true;
+};
 
 export const MAX_MSG_LEN = 200;
 export const fmtMsg = (content: string, length: number = MAX_MSG_LEN) => {

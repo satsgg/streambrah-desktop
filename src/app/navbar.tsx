@@ -2,6 +2,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Menu from "@/svgs/menu.svg";
 import { MenuState } from "@/store/types";
+import useUserStore from "@/store/userStore";
 
 const getTitle = (pathname: string) => {
   if (pathname === "/") {
@@ -20,12 +21,15 @@ const getTitle = (pathname: string) => {
 export default function Navbar({
   menu,
   setMenuState,
+  openLoginModal,
 }: {
   menu: MenuState;
   setMenuState: (state: MenuState) => void;
+  openLoginModal: () => void;
 }) {
   const pathname = usePathname();
   const [title, setTitle] = useState("dashboard");
+  const pubkey = useUserStore((state) => state.pubkey);
 
   useEffect(() => {
     setTitle(getTitle(pathname));
@@ -56,7 +60,14 @@ export default function Navbar({
           <p className="text-lg capitalize">{title}</p>
         </div>
         <div>
-          <p>Right</p>
+          {!pubkey && (
+            <button
+              onClick={openLoginModal}
+              className="py-1 px-2 rounded bg-red-500"
+            >
+              <p className="capitalize font-semibold">login</p>
+            </button>
+          )}
         </div>
       </div>
     </nav>
