@@ -13,6 +13,7 @@
     "@tauri-apps/api": "^1.5.3",
     "next": "14.1.0",
     "nostr-tools": "^2.1.7",
+    "obs-websocket-js": "^5.0.4",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",

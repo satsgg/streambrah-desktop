@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Menu from "@/svgs/menu.svg";
 import { MenuState } from "@/store/types";
 import useUserStore from "@/store/userStore";
+import useObs from "./useObs";
+import useObsStore from "@/store/obsStore";
 
 const getTitle = (pathname: string) => {
   if (pathname === "/") {
@@ -30,6 +32,7 @@ export default function Navbar({
   const pathname = usePathname();
   const [title, setTitle] = useState("dashboard");
   const pubkey = useUserStore((state) => state.pubkey);
+  const obsConnected = useObsStore((state) => state.connected);
 
   useEffect(() => {
     setTitle(getTitle(pathname));
@@ -60,14 +63,27 @@ export default function Navbar({
           <p className="text-lg capitalize">{title}</p>
         </div>
         <div>
-          {!pubkey && (
-            <button
-              onClick={openLoginModal}
-              className="py-1 px-2 rounded bg-red-500"
-            >
-              <p className="capitalize font-semibold">login</p>
-            </button>
-          )}
+          <div className="flex items-center">
+            {obsConnected ? (
+              <div className="flex items-center gap-1">
+                <div className="bg-green-500 rounded-[50%] h-3 w-3" />
+                <p className="text-sm font-semibold">OBS</p>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1">
+                <div className="bg-red-500 rounded-[50%] h-3 w-3" />
+                <p className="text-sm font-semibold">OBS</p>
+              </div>
+            )}
+            {!pubkey && (
+              <button
+                onClick={openLoginModal}
+                className="py-1 px-2 rounded bg-red-500"
+              >
+                <p className="capitalize font-semibold">login</p>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </nav>

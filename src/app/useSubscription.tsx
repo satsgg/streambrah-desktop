@@ -18,9 +18,9 @@ export default function useSubscription(relays: string[], filters: Filter[]) {
         });
       },
     });
-    // return () => {
-    //   Pool.close(relays);
-    // };
+    return () => {
+      Pool.close(relays);
+    };
   }, [relays, JSON.stringify(filters)]);
 
   return events;

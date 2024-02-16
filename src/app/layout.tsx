@@ -10,6 +10,7 @@ import useNostrStore from "@/store/nostrStore";
 import Menu from "./menu";
 import { InteractionModal } from "./interactionModal";
 import Login from "./login";
+import useObs from "./useObs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,11 @@ export default function RootLayout({
   const { menu, setMenuState } = useLayoutStore();
   const pubkey = useUserStore((state) => state.pubkey);
   const autoCollapseMenu = useMediaQuery("(max-width: 1024px)");
+  const { obsConnected, obsLive } = useObs();
+
+  useEffect(() => {
+    console.debug("obsConnected", obsConnected);
+  }, [obsConnected]);
 
   useEffect(() => {
     if (pubkey) {
