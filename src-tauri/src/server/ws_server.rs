@@ -8,7 +8,7 @@ use tauri::Manager;
 
 use crate::{NostrState, ReturnNostrState};
 
-use super::TauriAppState;
+use super::{TauriAppState, WidgetClientActors};
 
 /// How often heartbeat pings are sent
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
@@ -22,12 +22,14 @@ pub struct MyWebSocket {
     /// Client must send ping at least once per 10 seconds (CLIENT_TIMEOUT),
     /// otherwise we drop connection.
     hb: Instant,
-    tauri_app: web::Data<TauriAppState>
+    tauri_app: web::Data<TauriAppState>,
 }
 
 impl MyWebSocket {
+    // pub fn new(tauri_app_handle: web::Data<TauriAppState>, widget_actors: web::Data<WidgetClientActors>) -> Self {
     pub fn new(tauri_app_handle: web::Data<TauriAppState>) -> Self {
-        Self { hb: Instant::now(), tauri_app: tauri_app_handle }
+        // Self { hb: Instant::now(), tauri_app: tauri_app_handle, widget_actors: widget_actors }
+        Self { hb: Instant::now(), tauri_app: tauri_app_handle}
     }
 
     /// helper method that sends ping to client every 5 seconds (HEARTBEAT_INTERVAL).
@@ -59,7 +61,10 @@ impl Actor for MyWebSocket {
     fn started(&mut self, ctx: &mut Self::Context) {
         self.hb(ctx);
         ctx.text("Welcome to the WebSocket server!");
+
         let tauri_app_handle = self.tauri_app.app.lock().unwrap().clone();
+        let widget_actors = tauri_app_handle.state::<WidgetClientActors>();
+        widget_actors.clients.lock().unwrap().push(ctx.address());
         let my_state = tauri_app_handle.state::<NostrState>();
 
         let res = ReturnNostrState {
@@ -92,6 +97,23 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
                 ctx.stop();
             }
             _ => ctx.stop(),
+        }
+    }
+}
+
+#[derive(Message)]
+#[rtype(result = "()")]
+pub struct WebSocketMessage(pub ws::Message);
+
+// Implement handling for the ClientMessage for your WebSocket actor
+impl Handler<WebSocketMessage> for MyWebSocket {
+    type Result = ();
+
+    fn handle(&mut self, msg: WebSocketMessage, ctx: &mut Self::Context) {
+        match msg.0 {
+            ws::Message::Text(text) => ctx.text(text),
+            // Handle other ws::Message variants as needed
+            _ => {}
         }
     }
 }

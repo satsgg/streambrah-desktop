@@ -9,12 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
     "@tauri-apps/api": "^1.5.3",
     "next": "14.1.0",
+    "nostr-tools": "^2.1.7",
+    "obs-websocket-js": "^5.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.50.1",
+    "zod": "^3.22.4",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@tauri-apps/cli": "^1.5.9",
     "@types/node": "^20",
     "@types/react": "^18",
