@@ -24,10 +24,12 @@ export default function Navbar({
   menu,
   setMenuState,
   openLoginModal,
+  openObsConnectModal,
 }: {
   menu: MenuState;
   setMenuState: (state: MenuState) => void;
   openLoginModal: () => void;
+  openObsConnectModal: () => void;
 }) {
   const pathname = usePathname();
   const [title, setTitle] = useState("dashboard");
@@ -63,18 +65,20 @@ export default function Navbar({
           <p className="text-lg capitalize">{title}</p>
         </div>
         <div>
-          <div className="flex items-center">
-            {obsConnected ? (
-              <div className="flex items-center gap-1">
-                <div className="bg-green-500 rounded-[50%] h-3 w-3" />
-                <p className="text-sm font-semibold">OBS</p>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1">
-                <div className="bg-red-500 rounded-[50%] h-3 w-3" />
-                <p className="text-sm font-semibold">OBS</p>
-              </div>
-            )}
+          <div className="flex items-center gap-2">
+            <button onClick={openObsConnectModal}>
+              {obsConnected ? (
+                <div className="flex items-center gap-1">
+                  <div className="bg-green-500 rounded-[50%] h-3 w-3" />
+                  <p className="text-sm font-semibold">OBS</p>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <div className="bg-red-500 rounded-[50%] h-3 w-3" />
+                  <p className="text-sm font-semibold">OBS</p>
+                </div>
+              )}
+            </button>
             {!pubkey && (
               <button
                 onClick={openLoginModal}

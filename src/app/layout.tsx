@@ -11,6 +11,8 @@ import Menu from "./menu";
 import { InteractionModal } from "./interactionModal";
 import Login from "./login";
 import useObs from "./useObs";
+import ConnectObs from "./connectObs";
+import useObsStore from "@/store/obsStore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,15 +21,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [modal, setModal] = useState<"none" | "login">("none");
+  const [modal, setModal] = useState<"none" | "login" | "obsConnect">("none");
   const { menu, setMenuState } = useLayoutStore();
   const pubkey = useUserStore((state) => state.pubkey);
   const autoCollapseMenu = useMediaQuery("(max-width: 1024px)");
-  const { obsConnected, obsLive } = useObs();
-
-  useEffect(() => {
-    console.debug("obsConnected", obsConnected);
-  }, [obsConnected]);
+  useObs();
+  const obsConnected = useObsStore((state) => state.connected);
 
   useEffect(() => {
     if (pubkey) {
@@ -52,6 +51,7 @@ export default function RootLayout({
             menu={menu}
             setMenuState={setMenuState}
             openLoginModal={() => setModal("login")}
+            openObsConnectModal={() => setModal("obsConnect")}
           />
           <div className="flex h-full">
             <Menu
@@ -71,7 +71,17 @@ export default function RootLayout({
                   title={"Log In"}
                   close={() => setModal("none")}
                 >
-                  <Login close={() => setModal("none")} />
+                  <Login
+                    close={() => setModal(obsConnected ? "none" : "obsConnect")}
+                  />
+                </InteractionModal>
+              ),
+              obsConnect: (
+                <InteractionModal
+                  title={"Connect OBS"}
+                  close={() => setModal("none")}
+                >
+                  <ConnectObs close={() => setModal("none")} />
                 </InteractionModal>
               ),
               none: null,
