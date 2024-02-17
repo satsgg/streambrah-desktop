@@ -1,4 +1,5 @@
 "use client";
+import { invoke } from "@tauri-apps/api/tauri";
 import { useZodForm } from "./useZodForm";
 import { getPublicKey } from "nostr-tools/pure";
 import { decode } from "nostr-tools/nip19";
@@ -8,6 +9,19 @@ import useUserStore from "@/store/userStore";
 
 export default function Login({ close }: { close: () => void }) {
   const { setUserState } = useUserStore();
+
+  const storeKeyPair = async (privateKey: string, publicKey: string) => {
+    console.debug("storing private key");
+    try {
+      const res = await invoke("store_key_pair", {
+        privateKey: privateKey,
+        publicKey: publicKey,
+      });
+      console.debug("res", res);
+    } catch (e: any) {
+      console.error("failed to store key pair", e);
+    }
+  };
 
   const privkeyValidator = (key: string) => {
     if (key.startsWith("nsec1")) {
@@ -34,23 +48,22 @@ export default function Login({ close }: { close: () => void }) {
     },
   });
 
-  // TODO: Save private key to keychain
-  const onSubmit = (data: { key: string }) => {
+  const onSubmit = async (data: { key: string }) => {
     const privkey = data.key;
     if (privkey.startsWith("nsec1")) {
       let { type, data: nipData } = decode(privkey);
       const pubkey = getPublicKey(nipData as Uint8Array);
+      await storeKeyPair(privkey, pubkey);
       setUserState(pubkey, "local");
-      // setPrivkey(nipData as string);
       close();
       return;
     }
     // privkey is 64 bytes, getPublicKey is expecting 32 bytes
     //@ts-ignore
     const pubkey = getPublicKey(privkey);
+    await storeKeyPair(privkey, pubkey);
     setUserState(pubkey, "local");
     close();
-    // setPrivkey(privkey);
   };
 
   return (

@@ -8,8 +8,8 @@ import useObsStore from "@/store/obsStore";
 const getTitle = (pathname: string) => {
   if (pathname === "/") {
     return "dashboard";
-  } else if (pathname === "/settings") {
-    return "settings";
+  } else if (pathname === "/settings/keys") {
+    return "keys";
   } else if (pathname === "/apps") {
     return "apps";
   } else if (pathname === "/integrations/owncast") {

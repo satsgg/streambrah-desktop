@@ -63,13 +63,15 @@ fn set_state<'r>(state: State<'r, NostrState>, pubkey: String, identifier: Strin
 }
 
 #[tauri::command]
-fn store_private_key(private_key: String) -> Result<(), String> {
+fn store_key_pair(private_key: String, public_key: String) -> Result<(), String> {
     // let entry = Entry::new("key_store", "pubkey123");
-    let entry = Entry::new("key_store", "pubkey123").map_err(|e| e.to_string())?;
+    // let entry = Entry::new("key_store", "pubkey123").map_err(|e| e.to_string())?;
+    let entry = Entry::new("key_store", &public_key).map_err(|e| e.to_string())?;
 
     // entry.set_password("topS3cr3tP4$$w0rd")?;
     // entry.set_password(&key).map_err(|e| e.to_string())?;
-    entry.set_password("topS3cr3tP4$$w0rd").map_err(|e| e.to_string())?;
+    // entry.set_password("topS3cr3tP4$$w0rd").map_err(|e| e.to_string())?;
+    entry.set_password(&private_key).map_err(|e| e.to_string())?;
 
     // let password = entry.get_password()?;
     // let password = entry.get_password().map_err(|e| e.to_string())
@@ -97,7 +99,7 @@ fn main() {
         });
         Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_state, set_state, store_private_key])
+        .invoke_handler(tauri::generate_handler![get_state, set_state, store_key_pair])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
