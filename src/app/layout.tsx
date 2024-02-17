@@ -25,7 +25,6 @@ export default function RootLayout({
   const { menu, setMenuState } = useLayoutStore();
   const pubkey = useUserStore((state) => state.pubkey);
   const autoCollapseMenu = useMediaQuery("(max-width: 1024px)");
-  useObs();
   const obsConnected = useObsStore((state) => state.connected);
 
   useEffect(() => {

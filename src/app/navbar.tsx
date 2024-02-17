@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Menu from "@/svgs/menu.svg";
 import { MenuState } from "@/store/types";
 import useUserStore from "@/store/userStore";
-import useObs from "./useObs";
 import useObsStore from "@/store/obsStore";
 
 const getTitle = (pathname: string) => {
