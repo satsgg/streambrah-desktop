@@ -7,8 +7,8 @@ export const validHexPrivkey = (hexKey: string) => {
       throw new Error("Invalid hex private key");
     }
     const textEncoder = new TextEncoder();
-    let npub = nsecEncode(textEncoder.encode(hexKey));
-    let { type, data: nipData } = decode(npub);
+    let nsec = nsecEncode(textEncoder.encode(hexKey));
+    let { type, data: nipData } = decode(nsec);
     if (type !== "nsec") {
       throw new Error("Invalid hex private key");
     }
