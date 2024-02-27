@@ -6,11 +6,11 @@ import Navbar from "./navbar";
 import { useEffect, useState } from "react";
 import useMediaQuery from "./useMediaQuery";
 import useUserStore from "@/store/userStore";
-import useNostrStore from "@/store/nostrStore";
+// import useNostrStore from "@/store/nostrStore";
 import Menu from "./menu";
 import { InteractionModal } from "./interactionModal";
 import Login from "./login";
-import useObs from "./useObs";
+// import useObs from "./useObs";
 import ConnectObs from "./connectObs";
 import useObsStore from "@/store/obsStore";
 
@@ -23,23 +23,25 @@ export default function RootLayout({
 }>) {
   const [modal, setModal] = useState<"none" | "login" | "obsConnect">("none");
   const { menu, setMenuState } = useLayoutStore();
-  const pubkey = useUserStore((state) => state.pubkey);
+  const pubkey = useUserStore((state) => state.auth.pubkey);
+  // const pubkey = useUserStore("", (state: { pubkey: any; }) => state.pubkey);
   const autoCollapseMenu = useMediaQuery("(max-width: 1024px)");
   const obsConnected = useObsStore((state) => state.connected);
 
   useEffect(() => {
     if (pubkey) {
       console.debug("yes pubkey", pubkey);
-      // useNostrStore.persist.setOptions({ name: pubkey });
-      useNostrStore.persist.setOptions({
+      useUserStore.persist.setOptions({
         name: pubkey,
       });
-      useNostrStore.persist.rehydrate();
+      useUserStore.persist.rehydrate();
+      // localStorage.removeItem("defaultUser");
     } else {
-      // TODO: Log out
       console.debug("no pubkey", pubkey);
+      useUserStore.persist.setOptions({
+        name: "defaultUser",
+      });
     }
-    // useNostrStore.persist.setOptions({ name: pubkey });
   }, [pubkey]);
 
   return (

@@ -1,23 +1,24 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { StateCreator } from "zustand";
 
 type Status = "planned" | "live" | "ended";
 
 type State = {
-  d: string;
-  title: string;
-  summary: string;
-  image: string;
-  streaming: string;
-  recording: string;
-  starts: string;
-  ends: string;
-  status: Status;
-  currentParticipants: string;
-  totalParticipants: string;
-  p: string[];
-  t: string[];
-  relays: string[];
+  nostr: {
+    d: string;
+    title: string;
+    summary: string;
+    image: string;
+    streaming: string;
+    recording: string;
+    starts: string;
+    ends: string;
+    status: Status;
+    currentParticipants: string;
+    totalParticipants: string;
+    p: string[];
+    t: string[];
+    relays: string[];
+  };
 };
 
 type Actions = {
@@ -37,48 +38,54 @@ type Actions = {
   setRelays: (relays: string[]) => void;
 };
 
+export type NostrSlice = State & Actions;
+
 const initialState = {
-  d: "",
-  title: "",
-  summary: "",
-  image: "",
-  streaming: "",
-  recording: "",
-  starts: "",
-  ends: "",
-  status: "planned" as const,
-  currentParticipants: "0",
-  totalParticipants: "0",
-  t: [],
-  p: [],
-  relays: [],
+  nostr: {
+    d: "",
+    title: "",
+    summary: "",
+    image: "",
+    streaming: "",
+    recording: "",
+    starts: "",
+    ends: "",
+    status: "planned" as const,
+    currentParticipants: "0",
+    totalParticipants: "0",
+    t: [],
+    p: [],
+    relays: [],
+  },
 };
 
-export const useNostrStore = create<State & Actions>()(
-  persist(
-    (set) => ({
-      ...initialState,
-      setIdentifier: (d: string) => set({ d: d }),
-      setTitle: (title: string) => set({ title: title }),
-      setSummary: (summary: string) => set({ summary: summary }),
-      setImage: (image: string) => set({ image: image }),
-      setStreaming: (streaming: string) => set({ streaming: streaming }),
-      setRecording: (recording: string) => set({ recording: recording }),
-      setStarts: (starts: string) => set({ starts: starts }),
-      setEnds: (ends: string) => set({ ends: ends }),
-      setStatus: (status: Status) => set({ status: status }),
-      setCurrentParticipants: (currentParticipants: string) =>
-        set({ currentParticipants: currentParticipants }),
-      setTotalParticipants: (totalParticipants: string) =>
-        set({ totalParticipants: totalParticipants }),
-      setTags: (t: string[]) => set({ t: t }),
-      setParticipants: (p: string[]) => set({ p: p }),
-      setRelays: (relays: string[]) => set({ relays: relays }),
+export const createNostrSlice: StateCreator<NostrSlice, [], [], NostrSlice> = (
+  set,
+  get
+) => ({
+  ...initialState,
+  setIdentifier: (d: string) => set({ nostr: { ...get().nostr, d: d } }),
+  setTitle: (title: string) => set({ nostr: { ...get().nostr, title: title } }),
+  setSummary: (summary: string) =>
+    set({ nostr: { ...get().nostr, summary: summary } }),
+  setImage: (image: string) => set({ nostr: { ...get().nostr, image: image } }),
+  setStreaming: (streaming: string) =>
+    set({ nostr: { ...get().nostr, streaming: streaming } }),
+  setRecording: (recording: string) =>
+    set({ nostr: { ...get().nostr, recording: recording } }),
+  setStarts: (starts: string) =>
+    set({ nostr: { ...get().nostr, starts: starts } }),
+  setEnds: (ends: string) => set({ nostr: { ...get().nostr, ends: ends } }),
+  setStatus: (status: Status) =>
+    set({ nostr: { ...get().nostr, status: status } }),
+  setCurrentParticipants: (currentParticipants: string) =>
+    set({
+      nostr: { ...get().nostr, currentParticipants: currentParticipants },
     }),
-    {
-      name: "default-nostr",
-    }
-  )
-);
-
-export default useNostrStore;
+  setTotalParticipants: (totalParticipants: string) =>
+    set({ nostr: { ...get().nostr, totalParticipants: totalParticipants } }),
+  setTags: (t: string[]) => set({ nostr: { ...get().nostr, t: t } }),
+  setParticipants: (p: string[]) => set({ nostr: { ...get().nostr, p: p } }),
+  setRelays: (relays: string[]) =>
+    set({ nostr: { ...get().nostr, relays: relays } }),
+});

@@ -37,10 +37,10 @@ export default function Navbar({
 }) {
   const pathname = usePathname();
   const [title, setTitle] = useState("dashboard");
-  const [pubkey, logout, hydrated] = useUserStore((state) => [
-    state.pubkey,
+  const [pubkey, logout, isHydrated] = useUserStore((state) => [
+    state.auth.pubkey,
     state.logout,
-    state.hydrated,
+    state.isHydrated,
   ]);
   const obsConnected = useObsStore((state) => state.connected);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
@@ -60,6 +60,9 @@ export default function Navbar({
   const handleLogout = async () => {
     await deleteKeyPair(pubkey);
     setShowAccountMenu(false);
+    useUserStore.persist.setOptions({
+      name: "defaultUser",
+    });
     logout();
   };
 
@@ -106,7 +109,7 @@ export default function Navbar({
                 </div>
               )}
             </button>
-            {hydrated && pubkey && (
+            {isHydrated && pubkey && (
               <div className="dropdown relative">
                 <a
                   className="dropdown-toggle hidden-arrow flex items-center"
@@ -148,7 +151,7 @@ export default function Navbar({
                 )}
               </div>
             )}
-            {hydrated && !pubkey && (
+            {isHydrated && !pubkey && (
               <button
                 onClick={openLoginModal}
                 className="py-1 px-2 rounded bg-red-500"

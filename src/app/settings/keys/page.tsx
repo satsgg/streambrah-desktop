@@ -9,7 +9,7 @@ import { invoke } from "@tauri-apps/api";
 import { hexToBytes } from "@noble/hashes/utils";
 
 export default function Keys() {
-  const pubkey = useUserStore((state) => state.pubkey);
+  const pubkey = useUserStore((state) => state.auth.pubkey);
   const [nsec, setNsec] = useState("");
   const [pubkeyCopied, setPubkeyCopied] = useState(false);
   const [privateKeyCopied, setPrivateKeyCopied] = useState(false);

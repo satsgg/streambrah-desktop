@@ -1,42 +1,28 @@
-import { create } from "zustand";
+import { StateCreator, create } from "zustand";
 import { persist } from "zustand/middleware";
+import { AuthSlice, createAuthSlice } from "./authStore";
+import { NostrSlice, createNostrSlice } from "./nostrStore";
 
-type AuthType = "local" | "nip46";
-
-type State = {
-  pubkey: string;
-  authType: AuthType;
-  hydrated: boolean;
-};
-
-type Actions = {
-  setUserState: (pubkey: string, authType: AuthType) => void;
-  logout: () => void;
+interface StoreSlice {
+  isHydrated: boolean;
   setHydrated: () => void;
-};
+}
+const createStoreSlice: StateCreator<StoreSlice, [], [], StoreSlice> = (
+  set
+) => ({
+  isHydrated: false,
+  setHydrated: () => set({ isHydrated: true }),
+});
 
-const initialState = {
-  pubkey: "",
-  authType: "local" as const,
-  hydrated: false,
-};
-
-export const useUserStore = create<State & Actions>()(
+const useUserStore = create<AuthSlice & NostrSlice & StoreSlice>()(
   persist(
-    (set) => ({
-      ...initialState,
-      setUserState: (pubkey: string, authType: AuthType) => {
-        set({ pubkey: pubkey, authType: authType });
-      },
-      logout: () => {
-        set(initialState);
-      },
-      setHydrated: () => {
-        set({ hydrated: true });
-      },
+    (...a) => ({
+      ...createAuthSlice(...a),
+      ...createNostrSlice(...a),
+      ...createStoreSlice(...a),
     }),
     {
-      name: "user",
+      name: "defaultUser",
       onRehydrateStorage: (state) => {
         return (state, error) => {
           if (error) {
@@ -46,10 +32,7 @@ export const useUserStore = create<State & Actions>()(
           }
         };
       },
-      partialize: (state) => ({
-        pubkey: state.pubkey,
-        authType: state.authType,
-      }),
+      // partialize: (state) => ({ settings: state.settings }),
     }
   )
 );
