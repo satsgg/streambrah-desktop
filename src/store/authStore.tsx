@@ -11,7 +11,7 @@ type State = {
 
 type Actions = {
   setUserState: (pubkey: string, authType: AuthType) => void;
-  logout: () => void;
+  resetAuth: () => void;
 };
 
 export type AuthSlice = State & Actions;
@@ -30,8 +30,5 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
   setUserState: (pubkey: string, authType: AuthType) => {
     set({ auth: { pubkey: pubkey, authType: authType } });
   },
-  logout: () => {
-    // NOTE: useEffect switches key name back to defaultUser before we reset here
-    set(initialState);
-  },
+  resetAuth: () => set(initialState),
 });

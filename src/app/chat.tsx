@@ -3,6 +3,7 @@ import useSubscription from "./useSubscription";
 import { fmtMsg } from "./util";
 import useChatLiveModeScrolling from "./useChatLiveModeScrolling";
 import ChatPausedAlert from "./chatPausedAlert";
+import Button from "./button";
 
 const relays = ["wss://relay.damus.io", "wss://nostr.fmt.wiz.biz"];
 
@@ -50,9 +51,7 @@ export default function Chat() {
         <div className="flex flex-col gap-4">
           <div className="border rounded px-2 py-1">Send a message</div>
           <div className="flex justify-end">
-            <button className="border rounded bg-red-500 px-2 py-1">
-              Chat
-            </button>
+            <Button>Chat</Button>
           </div>
         </div>
       </div>

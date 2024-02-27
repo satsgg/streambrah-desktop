@@ -14,8 +14,6 @@ export default function Keys() {
   const [pubkeyCopied, setPubkeyCopied] = useState(false);
   const [privateKeyCopied, setPrivateKeyCopied] = useState(false);
   const npub = pubkey ? npubEncode(pubkey) : "";
-  console.debug("pubkey", pubkey);
-  console.debug("npub", npub);
 
   const handlePubkeyCopy = async () => {
     await navigator.clipboard.writeText(npub);

@@ -36,6 +36,8 @@ type Actions = {
   setTags: (t: string[]) => void;
   setParticipants: (p: string[]) => void;
   setRelays: (relays: string[]) => void;
+  setNostrValues: (values: {}) => void;
+  resetNostr: () => void;
 };
 
 export type NostrSlice = State & Actions;
@@ -88,4 +90,6 @@ export const createNostrSlice: StateCreator<NostrSlice, [], [], NostrSlice> = (
   setParticipants: (p: string[]) => set({ nostr: { ...get().nostr, p: p } }),
   setRelays: (relays: string[]) =>
     set({ nostr: { ...get().nostr, relays: relays } }),
+  setNostrValues: (values: {}) => set({ nostr: { ...get().nostr, ...values } }),
+  resetNostr: () => set(initialState),
 });

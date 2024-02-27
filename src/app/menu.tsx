@@ -7,6 +7,7 @@ import Home from "@/svgs/home.svg";
 import Settings from "@/svgs/settings.svg";
 import VideoCamera from "@/svgs/videoCamera.svg";
 import Wrench from "@/svgs/wrench.svg";
+import Stream from "@/svgs/stream.svg";
 import Key from "@/svgs/key.svg";
 import Link from "next/link";
 import MenuItem from "./menuItem";
@@ -117,13 +118,38 @@ export default function Menu({
           expandedItems.settings ? "max-h-20" : "invisible max-h-0"
         } transition-all linear`}
       >
+        <Link href="/settings/stream">
+          <div
+            className={`
+            ${collapse ? "hidden" : ""}
+            ${expandedItems.settings ? "" : "hidden"} ${
+              pathName === "/settings/stream"
+                ? "bg-primary-500"
+                : "hover:bg-stone-800"
+            } flex pl-12 pr-4 py-2 mx-1 rounded gap-2`}
+          >
+            <Stream
+              height={24}
+              width={24}
+              strokeWidth={1.5}
+              className="stroke-white"
+            />
+            <p className="capitalize">stream</p>
+          </div>
+        </Link>
+      </div>
+      <div
+        className={`${
+          expandedItems.settings ? "max-h-20" : "invisible max-h-0"
+        } transition-all linear`}
+      >
         <Link href="/settings/keys">
           <div
             className={`
             ${collapse ? "hidden" : ""}
             ${expandedItems.settings ? "" : "hidden"} ${
               pathName === "/settings/keys"
-                ? "bg-red-500"
+                ? "bg-primary-500"
                 : "hover:bg-stone-800"
             } flex pl-12 pr-4 py-2 mx-1 rounded gap-2`}
           >
@@ -191,7 +217,7 @@ export default function Menu({
             ${collapse ? "hidden" : ""}
             ${expandedItems.integrations ? "" : "hidden"} ${
               pathName === "/integrations/owncast"
-                ? "bg-red-500"
+                ? "bg-primary-500"
                 : "hover:bg-stone-800"
             } flex pl-12 pr-4 py-2 mx-1 rounded`}
           >

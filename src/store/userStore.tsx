@@ -6,12 +6,20 @@ import { NostrSlice, createNostrSlice } from "./nostrStore";
 interface StoreSlice {
   isHydrated: boolean;
   setHydrated: () => void;
+  logout: () => void;
 }
-const createStoreSlice: StateCreator<StoreSlice, [], [], StoreSlice> = (
-  set
-) => ({
+const createStoreSlice: StateCreator<
+  StoreSlice & AuthSlice & NostrSlice,
+  [],
+  [],
+  StoreSlice
+> = (set, get) => ({
   isHydrated: false,
   setHydrated: () => set({ isHydrated: true }),
+  logout: () => {
+    get().resetAuth();
+    get().resetNostr();
+  },
 });
 
 const useUserStore = create<AuthSlice & NostrSlice & StoreSlice>()(

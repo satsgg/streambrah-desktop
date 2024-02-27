@@ -21,7 +21,7 @@ export default function MenuItem({
   return (
     <div
       className={`${expandable ? "hover:cursor-pointer" : ""} ${
-        highlighted ? "bg-red-500" : "hover:bg-stone-800"
+        highlighted ? "bg-primary-500" : "hover:bg-stone-800"
       } flex justify-between px-4 py-2 mx-1 rounded`}
       onClick={onClick}
     >

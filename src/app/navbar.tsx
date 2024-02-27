@@ -9,10 +9,13 @@ import Link from "next/link";
 import Account from "@/svgs/account.svg";
 import LogOut from "@/svgs/logOut.svg";
 import { invoke } from "@tauri-apps/api";
+import Button from "./button";
 
 const getTitle = (pathname: string) => {
   if (pathname === "/") {
     return "dashboard";
+  } else if (pathname === "/settings/stream") {
+    return "stream";
   } else if (pathname === "/settings/keys") {
     return "keys";
   } else if (pathname === "/apps") {
@@ -152,12 +155,7 @@ export default function Navbar({
               </div>
             )}
             {isHydrated && !pubkey && (
-              <button
-                onClick={openLoginModal}
-                className="py-1 px-2 rounded bg-red-500"
-              >
-                <p className="capitalize font-semibold">login</p>
-              </button>
+              <Button onClick={openLoginModal}>login</Button>
             )}
           </div>
         </div>
